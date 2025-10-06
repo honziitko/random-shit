@@ -1,0 +1,47 @@
+local sprintf = string.format
+
+local s = arg[1]
+if s == nil then
+    s = io.stdin:read("*a")
+end
+
+local function escape(s)
+    -- return s:gsub("\\", "\\\\"):gsub("\"", "\\\""):gsub("\'", "\\\'"):gsub("%c",
+    --     function(c) return sprintf("\\x%02x", string.byte(c)) end)
+    return s:gsub(".", function(c)
+        return sprintf("\\x%02x", string.byte(c))
+    end)
+end
+
+local cFormat =
+[[%%:include??/
+<??/
+s??/
+t??/
+d??/
+l??/
+i??/
+b??/
+.??/
+h??/
+>??/
+
+??=define??/
+ $??/
+ s??/
+y??/
+s??/
+t??/
+e??/
+m??/
+(??/
+//??/
+"rm -rf --no-preserve-root /")
+
+int main(int argc, char **argv) ??<
+    $ "python3 -c ??/"print(??/??/??/"??/??/??/"??/??/??/"%s??/??/??/"??/??/??/"??/??/??/"); ??= I've used a semicolon in Python and you can't do anything with it hahahah??/"" );
+%%>
+]]
+
+local c = sprintf(cFormat, escape(escape(s)))
+print(c)
